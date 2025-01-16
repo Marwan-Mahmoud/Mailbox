@@ -1,0 +1,47 @@
+<p-toast position="bottom-right"></p-toast>
+
+<p-dialog
+    header="New Email"
+    [(visible)]="show"
+    [modal]="true"
+    [draggable]="false"
+    [dismissableMask]="true"
+    [styleClass]="'w-3/5 h-4/5'"
+    (onHide)="close()">
+    
+    <form class="h-full" [formGroup]="form" (ngSubmit)="send()">
+        <div class="flex flex-col h-full text-slate-900 text-opacity-90">
+            <label for="to">To:</label>
+            <input pInputText type="text"
+            id="to"
+            formControlName="to"
+            class="p-inputtext w-full h-10 mt-1"/>
+    
+            <label for="subject" class="mt-4">Subject:</label>
+            <input pInputText type="text"
+            id="subject"
+            formControlName="subject"
+            class="p-inputtext w-full h-10 mt-1"/>
+            
+            <label for="body" class="mt-4">Body:</label>
+            <textarea pInputTextarea
+            id="body"
+            formControlName="body"
+            class="w-full flex-grow mt-1 mb-4 resize-none text-sm"></textarea>
+
+            <div class="h-10 mb-2 w-full flex">
+                <button type="submit" pButton pRipple
+                label="Send" icon="pi pi-send"
+                [disabled]="form.invalid"
+                class="p-button-outlined p-button-primary mr-4">
+                </button>
+                
+                <button type="button" pButton pRipple
+                label="Draft" icon="pi pi-file-edit"
+                (click)="draft()"
+                class="p-button-outlined p-button-secondary">
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

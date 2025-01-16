@@ -1,0 +1,44 @@
+<p-dialog
+    [header]="email?.subject || ''"
+    [(visible)]="show"
+    [modal]="true"
+    [draggable]="false"
+    [dismissableMask]="true"
+    [styleClass]="'w-3/5 h-3/4'">
+    
+    <div class="w-full flex justify-between">
+        <span class="content-center text-slate-900 text-opacity-90 font-bold">{{email?.from}}</span>
+        <span class="content-center text-slate-900 text-opacity-70">{{email?.date | date: 'medium'}}</span>
+    </div>
+
+    <pre class="text-slate-900 text-opacity-90 mt-5">{{ email?.body }}</pre>
+
+    <ng-template pTemplate="footer">
+        <hr class="my-2">
+        <div class="h-10 w-full flex justify-start align-middle">
+            <button *ngIf="replyBtn" pButton pRipple
+            label="Reply" icon="pi pi-reply"
+            class="p-button-outlined p-button-info mr-4"
+            (click)="replyEmail()">
+            </button>
+            
+            <button *ngIf="moveToTrashBtn" pButton pRipple
+            label="Move To Trash" icon="pi pi-trash"
+            class="p-button-outlined p-button-danger"
+            (click)="moveEmailToTrash()">
+            </button>
+            
+            <button *ngIf="restoreBtn" pButton pRipple
+            label="Restore" icon="pi pi-undo"
+            class="p-button-outlined p-button-info mr-4"
+            (click)="restoreEmail()">
+            </button>
+            
+            <button *ngIf="deleteBtn" pButton pRipple
+            label="Delete" icon="pi pi-trash"
+            class="p-button-outlined p-button-danger"
+            (click)="deleteEmail()">
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

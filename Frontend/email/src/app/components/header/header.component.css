@@ -1,0 +1,3 @@
+.shadow-v {
+    box-shadow: 4px 0px 6px -1px var(--tw-shadow-color), 2px 0px 4px -2px var(--tw-shadow-color);
+}

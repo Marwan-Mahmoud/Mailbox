@@ -1,0 +1,18 @@
+<div class="flex flex-col w-full h-full">
+  <!-- Header -->
+  <div class="h-16 w-auto z-20">
+    <app-header (navbarEvent)="toggleNavbar()"></app-header>
+  </div>
+
+  <!-- Main content -->
+  <div class="grow flex">
+    <app-sidenav class="z-20" [open]="navbarOpen"></app-sidenav>
+    
+    <div class="grow h-auto">
+      <router-outlet></router-outlet>
+    </div>
+    
+    <!-- Modal -->
+    <app-compose></app-compose>
+  </div>
+</div>

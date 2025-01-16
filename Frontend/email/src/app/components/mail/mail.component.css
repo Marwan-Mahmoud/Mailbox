@@ -1,0 +1,7 @@
+::ng-deep .p-button:enabled:focus {
+    box-shadow: none !important;
+}
+
+::ng-deep .p-button-label {
+    @apply text-slate-900 text-opacity-90;
+}
