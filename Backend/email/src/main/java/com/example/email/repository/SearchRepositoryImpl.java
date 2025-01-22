@@ -20,33 +20,37 @@ public class SearchRepositoryImpl implements SearchRepository {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public Page<Email> searchEmails(List<String> ids, String from, String to, String subject, String body,
+    public Page<Email> searchEmails(List<String> ids, String keywords, String from, String to, String subject,
             Date startDate, Date endDate, Pageable pageable) {
-        Criteria criteria = new Criteria();
-        criteria.and("id").in(ids);
+        Criteria keywordsCriteria = new Criteria();
+        keywordsCriteria.orOperator(
+                Criteria.where("from").regex(keywords, "i"),
+                Criteria.where("to").regex(keywords, "i"),
+                Criteria.where("subject").regex(keywords, "i"),
+                Criteria.where("body").regex(keywords, "i"));
+
+        Criteria filterCriteria = Criteria.where("id").in(ids);
         if (from != null)
-            criteria.and("from").regex(from, "i");
+            filterCriteria.and("from").regex(from, "i");
         if (to != null)
-            criteria.and("to").regex(to, "i");
+            filterCriteria.and("to").regex(to, "i");
         if (subject != null)
-            criteria.and("subject").regex(subject, "i");
-        if (body != null)
-            criteria.and("body").regex(body, "i");
+            filterCriteria.and("subject").regex(subject, "i");
 
         if (startDate != null && endDate != null)
-            criteria.and("date").gte(startDate).lte(endDate);
+            filterCriteria.and("date").gte(startDate).lte(endDate);
         else if (startDate != null)
-            criteria.and("date").gte(startDate);
+            filterCriteria.and("date").gte(startDate);
         else if (endDate != null)
-            criteria.and("date").lte(endDate);
+            filterCriteria.and("date").lte(endDate);
 
         Query query = new Query();
-        query.addCriteria(criteria);
+        query.addCriteria(keywordsCriteria).addCriteria(filterCriteria);
+
         query.with(pageable);
 
         List<Email> emails = mongoTemplate.find(query, Email.class);
         return PageableExecutionUtils.getPage(emails, pageable,
                 () -> mongoTemplate.count(query.limit(-1).skip(-1), Email.class));
     }
-
 }

@@ -23,19 +23,19 @@ public class SearchService {
     private final FolderRepository folderRepository;
     private final ModelMapper modelMapper;
 
-    public Page<EmailDTO> search(String email, String folders, String from, String to, String subject, String body,
+    public Page<EmailDTO> search(String email, String folders, String keywords, String from, String to, String subject,
             Date startDate, Date endDate, Pageable pageable) {
         List<String> folderNames = getFolderNames(folders);
         List<String> ids = folderRepository.findByNameInAndOwner(folderNames, email).stream()
                 .map(f -> f.getEmails()).flatMap(List::stream).toList();
 
-        return emailRepository.searchEmails(ids, from, to, subject, body, startDate, endDate, pageable)
+        return emailRepository.searchEmails(ids, keywords, from, to, subject, startDate, endDate, pageable)
                 .map(e -> modelMapper.map(e, EmailDTO.class));
     }
 
     private List<String> getFolderNames(String folders) {
         List<String> basicFolders = List.of("Inbox", "Sent", "Draft", "Trash");
-        if (folders.equals("all"))
+        if (folders.equals("All"))
             return basicFolders;
         else if (basicFolders.contains(folders))
             return List.of(folders);
