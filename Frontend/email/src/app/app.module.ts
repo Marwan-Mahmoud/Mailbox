@@ -21,12 +21,16 @@ import { SignupComponent } from './components/signup/signup.component';
 import { TrashComponent } from './components/trash/trash.component';
 
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,8 @@ import { ToastModule } from 'primeng/toast';
     LoginComponent,
     SignupComponent,
     EmailViewComponent,
-    EmailsTableComponent
+    EmailsTableComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +62,10 @@ import { ToastModule } from 'primeng/toast';
     InputTextareaModule,
     InputTextModule,
     ButtonModule,
-    RippleModule
+    RippleModule,
+    OverlayPanelModule,
+    DropdownModule,
+    CalendarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

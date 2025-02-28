@@ -1,3 +1,74 @@
 .shadow-v {
     box-shadow: 4px 0px 6px -1px var(--tw-shadow-color), 2px 0px 4px -2px var(--tw-shadow-color);
 }
+
+label {
+    margin-right: 0.5rem;
+    width: 5.5rem;
+}
+
+.form-input {
+    @apply h-8 px-2 border-b focus:border-b-[var(--primary-color)] focus:outline-none flex-grow;
+}
+
+::ng-deep .p-dropdown {
+    height: 2rem;
+    width: 100%;
+    align-items: center;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+    box-shadow: none !important;
+}
+
+::ng-deep .p-dropdown-label {
+    @apply text-sm;
+}
+
+::ng-deep .p-dropdown-item {
+    @apply text-sm;
+}
+
+::ng-deep .p-datepicker table td > span {
+    font-size: 14px;
+    width: 1.875rem;
+    height: 1.875rem;
+}
+
+::ng-deep .p-datepicker table td {
+    padding: 0.25rem;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title {
+    line-height: 1.5rem;
+}
+
+::ng-deep .p-calendar .p-inputtext {
+    height: 2rem;
+    align-items: center;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+    font-size: 14px;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+::ng-deep .p-calendar-w-btn .p-datepicker-trigger {
+    border: none;
+    background-color: transparent;
+    color: rgb(15 23 42);
+    padding: 0px;
+    margin-left: -48px;
+}
+
+::ng-deep .p-calendar-w-btn .p-datepicker-trigger:hover {
+    background-color: transparent;
+    color: rgb(15 23 42);
+}
+
+::ng-deep .p-datepicker-header {
+    white-space: nowrap;
+}

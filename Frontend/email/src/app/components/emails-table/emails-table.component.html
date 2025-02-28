@@ -50,7 +50,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-email let-i="rowIndex">
-            <tr (click)="folder ==='drafts' ? editDraft(i) : viewEmail(i)"
+            <tr (click)="email.draft ? editDraft(i) : viewEmail(i)"
             class="row !text-slate-900 !text-opacity-90" [ngClass]="{ 'font-semibold': boldUnreadEmails && !email.read }">
                 <td>
                     <p-tableCheckbox [value]="email" (click)="$event.stopPropagation()"></p-tableCheckbox>

@@ -45,7 +45,7 @@ export class SignupComponent {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email already exists. Please log in or choose another email.' });
   }
 
-  passwordMatchValidator(): ValidatorFn {
+  private passwordMatchValidator(): ValidatorFn {
     return (formGroup: AbstractControl): ValidationErrors | null => {
       const password = formGroup.get('password')?.value;
       const confirmPassword = formGroup.get('confirmPassword')?.value;

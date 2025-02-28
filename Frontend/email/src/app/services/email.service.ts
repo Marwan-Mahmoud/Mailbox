@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Email } from '../models/email';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +9,8 @@ export class EmailService {
 
   constructor(private api: ApiService) { }
 
-  getPage(folder: string, size: number, page: number, sort: string) {
-    return this.api.getPage(folder, size, page, sort);
+  getPage(folder: string, size: number, page: number, sort: string, queryParams?: any) {
+    return this.api.getPage(folder, size, page, sort, queryParams);
   }
 
   sendEmail(to: string, subject: string, body: string) {

@@ -23,12 +23,13 @@ export class ApiService {
     });
   }
 
-  getPage(folder: string, size: number, page: number, sort: string) {
+  getPage(folder: string, size: number, page: number, sort: string, queryParams?: any) {
     const options = {
       params: {
         size: size,
         page: page,
         sort: sort,
+        ...queryParams
       },
       withCredentials: true,
     };

@@ -8,17 +8,67 @@
   </div>
 
   <!-- Search Bar -->
-   <div class="w-4/6 flex justify-center items-center">
-     <button class="relative left-8 hover:bg-slate-200 rounded-lg p-1">
-       <i class="pi pi-search text-slate-900 text-opacity-95"></i>
-     </button>
-     <input type="text" placeholder="Search..." class="px-10 py-2 w-3/5 rounded-lg text-slate-900 bg-slate-50" />
-     <button class="relative right-8 hover:bg-slate-200 rounded-lg p-1">
-       <i class="pi pi-filter text-slate-900 text-opacity-95"></i>
-     </button>
-   </div>
+  <div class="w-4/6">
+    <form class="w-full flex justify-center items-center" [formGroup]="form" (ngSubmit)="search()">
+      <button type="submit" class="relative left-8 hover:bg-slate-200 rounded-lg p-1">
+      <i class="pi pi-search text-slate-900 text-opacity-95"></i>
+    </button>
+
+    <input type="text" placeholder="Search..." formControlName="keywords"
+      class="px-10 py-2 w-3/5 rounded-lg focus:outline-none text-slate-900 bg-slate-50" />
+
+      <button type="button" (click)="op.toggle($event)" class="relative right-8 hover:bg-slate-200 rounded-lg p-1">
+      <i class="pi pi-filter text-slate-900 text-opacity-95"></i>
+    </button>
+
+    <p-overlayPanel #op>
+      <div class="flex flex-col h-full text-sm text-slate-900 text-opacity-90">
+        <div class="flex items-center justify-between">
+          <label for="from">From:</label>
+          <input type="text" id="from" formControlName="from" class="form-input" />
+        </div>
+
+        <div class="flex items-center mt-4 justify-between">
+          <label for="to">To:</label>
+          <input type="text" id="to" formControlName="to" class="form-input" />
+        </div>
+
+        <div class="flex items-center mt-4 justify-between">
+          <label for="subject">Subject:</label>
+          <input type="text" id="subject" formControlName="subject" class="form-input" />
+        </div>
+
+        <div class="flex items-center mt-4 justify-between">
+          <label for="subject">Date:</label>
+          <div class="flex flex-grow justify-between max-w-[400px]">
+            <p-calendar formControlName="fromDate" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="From"
+            class="inline-block w-[46%] cursor-pointer"/>
+            <p-calendar formControlName="toDate" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="To"
+            class="inline-block w-[46%] cursor-pointer"/>
+          </div>
+        </div>
+
+        <div class="flex items-center mt-4 justify-between">
+          <label for="folders">Search in:</label>
+          <p-dropdown id="folders" formControlName="folders" [options]="folders" optionLabel="name" class="flex-grow"/>
+        </div>
+        
+
+        <div class="mt-4">
+          <button (click)="search()" pButton pRipple label="Search" icon="pi pi-search"
+            class="p-button-outlined p-button-sm p-button-primary mr-3">
+          </button>
+          <button (click)="reset()" pButton pRipple label="Clear" icon="pi pi-times"
+            class="p-button-outlined p-button-sm p-button-secondary">
+          </button>
+        </div>
+      </div>
+    </p-overlayPanel>
+    </form>
+  </div>
 
   <div class="w-1/6 flex justify-end">
-    <button class="text-slate-900 text-opacity-95 text-lg bg-slate-50 hover:bg-slate-200 py-2 px-3 rounded-lg mr-6" routerLink="/login">Log out</button>
+    <button class="text-slate-900 text-opacity-95 text-lg bg-slate-50 hover:bg-slate-200 py-2 px-3 rounded-lg mr-6"
+      routerLink="/login">Log out</button>
   </div>
 </div>

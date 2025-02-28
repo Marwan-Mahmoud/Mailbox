@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Observable } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { Page } from 'src/app/models/page';
 import { EmailService } from 'src/app/services/email.service';
@@ -16,8 +17,10 @@ import { EventBusService } from 'src/app/services/event-bus.service';
 export class EmailsTableComponent {
   page: Page | undefined;
   selectedEmails: Email[] = [];
+  queryParams: Params | undefined;
 
   @Input() folder: string = '';
+  @Input() queryParamsObservable: Observable<Params> | undefined;
   @Input() col1: string = '';
   @Input() boldUnreadEmails: boolean = false;
   @Input() readUnreadBtn: boolean = false;
@@ -52,7 +55,10 @@ export class EmailsTableComponent {
   }
 
   ngOnInit(): void {
-    this.fetchPage();
+    this.queryParamsObservable?.subscribe((params) => {
+      this.queryParams = params;
+      this.refreshPage();
+    });
   }
 
   lazyLoadData(event: any) {
@@ -82,7 +88,7 @@ export class EmailsTableComponent {
       subject: clickedEmail.subject,
       body: clickedEmail.body,
     });
-    this.emailService.delete(this.folder, [clickedEmail]).subscribe();
+    this.emailService.delete('drafts', [clickedEmail]).subscribe();
   }
 
   moveEmailsToTrash() {
@@ -148,7 +154,7 @@ export class EmailsTableComponent {
   }
 
   private fetchPage(size: number = 10, page: number = 0, sort: string = 'date,desc') {
-    this.emailService.getPage(this.folder, size, page, sort).subscribe(
+    this.emailService.getPage(this.folder, size, page, sort, this.queryParams).subscribe(
       (data) => this.page = data,
       () => this.router.navigate(['/login'])
     );
@@ -163,6 +169,7 @@ export class EmailsTableComponent {
   }
   
   private refreshPage(): void {
-    this.fetchPage(this.page!.page.size, this.page!.page.number);
+    if (this.page)
+      this.fetchPage(this.page.page.size, this.page.page.number);
   }
 }
