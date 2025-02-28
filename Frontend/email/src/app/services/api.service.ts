@@ -17,6 +17,12 @@ export class ApiService {
     });
   }
 
+  logout() {
+    return this.http.post(`${this.baseUrl}/logout`, null, {
+      withCredentials: true
+    });
+  }
+
   signup(user: User) {
     return this.http.post(`${this.baseUrl}/signup`, user, {
       withCredentials: true,

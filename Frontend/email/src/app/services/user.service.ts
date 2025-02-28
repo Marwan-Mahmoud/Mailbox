@@ -17,6 +17,10 @@ export class UserService {
     return this.api.login(user);
   }
 
+  logout() {
+    return this.api.logout();
+  }
+
   signup(email: string, password: string) {
     const user: User = {
       email: email,

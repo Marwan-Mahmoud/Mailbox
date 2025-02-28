@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmailService } from 'src/app/services/email.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -33,7 +34,14 @@ export class HeaderComponent {
     this.notEmptyFormValidator()
   );
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
+
+  logout() {
+    this.userService.logout().subscribe(() => {
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    });
+  }
 
   search() {
     const formValues = this.getFormFields();
