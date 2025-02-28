@@ -38,11 +38,11 @@ public class SearchRepositoryImpl implements SearchRepository {
             filterCriteria.and("subject").regex(subject, "i");
 
         if (startDate != null && endDate != null)
-            filterCriteria.and("date").gte(startDate).lte(endDate);
+            filterCriteria.and("date").gte(startDate).lt(endDate);
         else if (startDate != null)
             filterCriteria.and("date").gte(startDate);
         else if (endDate != null)
-            filterCriteria.and("date").lte(endDate);
+            filterCriteria.and("date").lt(endDate);
 
         Query query = new Query();
         query.addCriteria(keywordsCriteria).addCriteria(filterCriteria);

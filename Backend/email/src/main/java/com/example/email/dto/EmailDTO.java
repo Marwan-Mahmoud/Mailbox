@@ -32,4 +32,5 @@ public class EmailDTO {
 
     private Boolean read;
 
+    private Boolean draft;
 }

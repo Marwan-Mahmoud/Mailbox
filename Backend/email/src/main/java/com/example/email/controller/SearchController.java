@@ -29,7 +29,7 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<Page<EmailDTO>> searchEmails(HttpSession session, Pageable pageable,
             @RequestParam(required = true) String folders,
-            @RequestParam(required = true) String keywords,
+            @RequestParam(required = false, defaultValue = "") String keywords,
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String to,
             @RequestParam(required = false) String subject,

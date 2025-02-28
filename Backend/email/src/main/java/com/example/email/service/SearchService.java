@@ -1,5 +1,6 @@
 package com.example.email.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -29,12 +30,20 @@ public class SearchService {
         List<String> ids = folderRepository.findByNameInAndOwner(folderNames, email).stream()
                 .map(f -> f.getEmails()).flatMap(List::stream).toList();
 
+        if (endDate != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(endDate);
+
+            calendar.add(Calendar.DATE, 1);
+            endDate = calendar.getTime();
+        }
+
         return emailRepository.searchEmails(ids, keywords, from, to, subject, startDate, endDate, pageable)
                 .map(e -> modelMapper.map(e, EmailDTO.class));
     }
 
     private List<String> getFolderNames(String folders) {
-        List<String> basicFolders = List.of("Inbox", "Sent", "Draft", "Trash");
+        List<String> basicFolders = List.of("Inbox", "Sent", "Drafts", "Trash");
         if (folders.equals("All"))
             return basicFolders;
         else if (basicFolders.contains(folders))
