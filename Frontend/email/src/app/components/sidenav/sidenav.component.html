@@ -3,7 +3,7 @@
   [ngClass]="open ? 'w-48' : 'w-14'"
 >
   <button
-    class="hover:bg-slate-800 py-3 my-2 w-4/5 text-xl text-slate-100 rounded-2xl whitespace-nowrap overflow-hidden"
+    class="hover:bg-slate-800 py-3 my-2 w-4/5 text-xl text-slate-100 rounded-2xl border-2 border-transparent whitespace-nowrap overflow-hidden"
     [ngClass]="{ 'pl-4': open, 'text-start': open }"
     (click)="showComposeEmailModal()"
   >
@@ -13,9 +13,10 @@
 
   <a
     *ngFor="let button of buttons"
-    class="hover:bg-slate-800 py-3 my-2 w-4/5 text-xl text-slate-100 rounded-2xl whitespace-nowrap overflow-hidden"
+    class="hover:bg-slate-800 py-3 my-2 w-4/5 text-xl text-slate-100 rounded-2xl border-2 border-transparent whitespace-nowrap overflow-hidden"
     [ngClass]="{ 'pl-4': open, 'text-center': !open }"
     [routerLink]="button.link"
+    [routerLinkActive]="'!border-[var(--primary-color)]'"
   >
     <i class="text-xl" [class]="button.icon" [ngClass]="{ 'mr-2': open }"></i>
     {{ open ? button.name : "" }}
