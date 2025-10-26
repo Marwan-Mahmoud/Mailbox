@@ -35,12 +35,12 @@ export class EmailService {
 
   delete(folder: string, emails: Email[]) {
     const ids = emails.map((email) => email.id);
-    return this.api.delete(folder, ids);
+    return this.api.deleteEmails(folder, ids);
   }
 
   restore(emails: Email[]) {
     const ids = emails.map((email) => email.id);
-    return this.api.restore(ids);
+    return this.api.restoreEmails(ids);
   }
 
   markAs(emails: Email[], read: boolean) {

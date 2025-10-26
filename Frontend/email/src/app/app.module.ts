@@ -27,6 +27,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PaginatorModule } from 'primeng/paginator';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -65,7 +66,8 @@ import { SearchComponent } from './components/search/search.component';
     RippleModule,
     OverlayPanelModule,
     DropdownModule,
-    CalendarModule
+    CalendarModule,
+    PaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

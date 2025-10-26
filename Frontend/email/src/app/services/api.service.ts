@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { Page } from '../models/page';
+import { EmailPage } from '../models/email-page';
+import { FolderPage } from '../models/folder-page';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class ApiService {
       },
       withCredentials: true,
     };
-    return this.http.get<Page>(`${this.baseUrl}/${folder}`, options);
+    return this.http.get<EmailPage>(`${this.baseUrl}/${folder}`, options);
   }
 
   sendEmail(email: any) {
@@ -56,7 +57,7 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/compose/draft`, email, options);
   }
 
-  delete(folder: string, ids: string[]) {
+  deleteEmails(folder: string, ids: string[]) {
     const options = {
       withCredentials: true,
       body: ids,
@@ -64,7 +65,7 @@ export class ApiService {
     return this.http.delete(`${this.baseUrl}/${folder}`, options);
   }
 
-  restore(ids: string[]) {
+  restoreEmails(ids: string[]) {
     const options = {
       withCredentials: true
     };
@@ -80,4 +81,44 @@ export class ApiService {
     };
     return this.http.patch(`${this.baseUrl}/inbox`, ids, options);
   }
+
+  getFolders(size: number, page: number, sort: string) {
+    const options = {
+      params: {
+        size: size,
+        page: page,
+        sort: sort
+      },
+      withCredentials: true,
+    };
+    return this.http.get<FolderPage>(`${this.baseUrl}/folders`, options);
+  }
+
+  createFolder(name: string) {
+    const options = {
+      params: {
+        name: name
+      },
+      withCredentials: true,
+    };
+    return this.http.post(`${this.baseUrl}/folders`, null, options);
+  }
+
+  renameFolder(folderId: string, newName: string) {
+    const options = {
+      params: {
+        name: newName
+      },
+      withCredentials: true,
+    };
+    return this.http.patch(`${this.baseUrl}/folders/rename/${folderId}`, null, options);
+  }
+
+  deleteFolder(folderId: string) {
+    const options = {
+      withCredentials: true,
+    };
+    return this.http.delete(`${this.baseUrl}/folders/${folderId}`, options);
+  }
+  
 }

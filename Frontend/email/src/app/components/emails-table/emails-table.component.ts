@@ -4,7 +4,7 @@ import { Params, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { Email } from 'src/app/models/email';
-import { Page } from 'src/app/models/page';
+import { EmailPage } from 'src/app/models/email-page';
 import { EmailService } from 'src/app/services/email.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
 
@@ -15,7 +15,7 @@ import { EventBusService } from 'src/app/services/event-bus.service';
   providers: [DatePipe, MessageService]
 })
 export class EmailsTableComponent {
-  page: Page | undefined;
+  page: EmailPage | undefined;
   selectedEmails: Email[] = [];
   queryParams: Params | undefined;
 

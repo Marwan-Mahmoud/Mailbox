@@ -1,1 +1,45 @@
-<p>folders works!</p>
+<p-toast position="bottom-right" key="success"></p-toast>
+<p-toast position="top-center" key="error"></p-toast>
+
+<div class="h-full flex flex-col">
+    <div class="bg-slate-50 py-2 px-5">
+        <button (click)="createMode()" pRipple class="toolbar-btn">
+            <i class="pi pi-folder-plus align-text-top mr-[1px]"></i>
+            New Folder
+        </button>
+        <button (click)="renameMode()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
+            <i class="pi pi-pencil align-text-top mr-[1px]"></i>
+            Rename
+        </button>
+        <button (click)="deleteFolder()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
+            <i class="pi pi-trash align-text-top mr-[1px]"></i>
+            Delete
+        </button>
+    </div>
+
+    <div class="flex-grow p-5 2xl:p-6" (click)="unselectFolder()">
+        <div #gridContainer class="h-full grid justify-between content-start gap-4 2xl:gap-5" [style.grid-template-columns]="columnsCount">
+            <button
+            *ngFor="let folder of folders"
+            (click)="selectFolder(folder); $event.stopPropagation()"
+            class="h-40 w-52 flex flex-col justify-center items-center rounded-xl hover:bg-slate-100"
+            [ngClass]="{ 'bg-slate-100': selectedFolder === folder }">
+                <i class="material-symbols-outlined folder-icon">folder</i>
+                <span *ngIf="!renaming || selectedFolder !== folder" class="w-3/4 whitespace-nowrap overflow-hidden text-ellipsis">{{folder.name}}</span>
+                
+                <input type="text" class="w-3/4 text-center"
+                *ngIf="renaming && selectedFolder === folder"
+                #renameInput
+                (blur)="renameEnd()" (keyup.enter)="renameEnd()" (keyup.escape)="cancelCreate()"
+                [(ngModel)]="newFolderName" />
+            </button>
+        </div>
+    </div>
+
+    <p-paginator
+    (onPageChange)="onPageChange($event)" 
+    [rows]="page?.page?.size || 0"
+    [totalRecords]="page?.page?.totalElements || 0"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="{first}-{last} of {totalRecords}"></p-paginator>
+</div>
