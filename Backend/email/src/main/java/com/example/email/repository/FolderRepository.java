@@ -11,7 +11,7 @@ import com.example.email.model.Folder;
 
 public interface FolderRepository extends MongoRepository<Folder, String> {
 
-    Page<Folder> findByOwner(String owner, Pageable pageable);
+    Page<Folder> findByOwnerAndNameNotIn(String owner, List<String> names, Pageable pageable);
 
     Optional<Folder> findByNameAndOwner(String name, String owner);
 

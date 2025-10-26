@@ -43,10 +43,10 @@ public class SearchService {
     }
 
     private List<String> getFolderNames(String folders) {
-        List<String> basicFolders = List.of("Inbox", "Sent", "Drafts", "Trash");
+        List<String> systemFolders = List.of("Inbox", "Sent", "Drafts", "Trash");
         if (folders.equals("All"))
-            return basicFolders;
-        else if (basicFolders.contains(folders))
+            return systemFolders;
+        else if (systemFolders.contains(folders))
             return List.of(folders);
         else
             throw new IllegalArgumentException("Invalid folder name");

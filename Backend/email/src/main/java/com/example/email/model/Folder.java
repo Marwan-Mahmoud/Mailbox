@@ -1,5 +1,6 @@
 package com.example.email.model;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -21,5 +22,9 @@ public class Folder {
     private String owner;
 
     private List<String> emails;
+
+    private Date creationDate;
+
+    private boolean isSystemFolder;
 
 }

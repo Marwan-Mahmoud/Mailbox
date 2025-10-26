@@ -47,7 +47,7 @@ public class UserService {
         newUser.setPassword(hash);
 
         userRepository.save(newUser);
-        folderService.createBasicFolders(email);
+        folderService.createSystemFolders(email);
         return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.email.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.email.dto.EmailDTO;
 import com.example.email.dto.FolderDTO;
@@ -28,10 +30,10 @@ public class FolderService {
     private final FolderRepository folderRepository;
     private final EmailRepository emailRepository;
     private final ModelMapper modelMapper;
-    private final String[] basicFolders = { "Inbox", "Sent", "Drafts", "Trash" };
+    private final String[] systemFolders = { "Inbox", "Sent", "Drafts", "Trash" };
 
     public Page<FolderDTO> getFolders(String owner, Pageable pageable) {
-        return folderRepository.findByOwner(owner, pageable)
+        return folderRepository.findByOwnerAndNameNotIn(owner, List.of(systemFolders), pageable)
                 .map(f -> modelMapper.map(f, FolderDTO.class));
     }
 
@@ -60,13 +62,15 @@ public class FolderService {
                 .map(e -> modelMapper.map(e, EmailDTO.class));
     }
 
-    public void createBasicFolders(String owner) {
+    public void createSystemFolders(String owner) {
         List<Folder> folders = new ArrayList<>();
-        for (String name : basicFolders) {
+        for (String name : systemFolders) {
             Folder folder = new Folder();
             folder.setName(name);
             folder.setOwner(owner);
             folder.setEmails(new ArrayList<String>());
+            folder.setCreationDate(new Date());
+            folder.setSystemFolder(true);
             folders.add(folder);
         }
         folderRepository.saveAll(folders);
@@ -80,10 +84,13 @@ public class FolderService {
         folder.setName(name);
         folder.setOwner(owner);
         folder.setEmails(new ArrayList<String>());
+        folder.setCreationDate(new Date());
+        folder.setSystemFolder(false);
         folderRepository.save(folder);
         return true;
     }
 
+    @Transactional
     public void addEmail(String name, String owner, String emailId) {
         Optional<Folder> retrievedFolder = folderRepository.findByNameAndOwner(name, owner);
         if (retrievedFolder.isEmpty())
@@ -104,6 +111,7 @@ public class FolderService {
         }
     }
 
+    @Transactional
     public void addEmailsById(String folderId, String owner, List<String> emailIds) {
         Optional<Folder> retrievedFolder = folderRepository.findById(folderId);
 
@@ -126,6 +134,7 @@ public class FolderService {
         folderRepository.save(folder);
     }
 
+    @Transactional
     public void addEmailsByName(String folderName, String owner, List<String> emailIds) {
         Optional<Folder> retrievedFolder = folderRepository.findByNameAndOwner(folderName, owner);
 
@@ -145,6 +154,7 @@ public class FolderService {
         folderRepository.save(folder);
     }
 
+    @Transactional
     public void removeEmailsById(String folderId, String owner, List<String> emailIds) {
         Optional<Folder> retrievedFolder = folderRepository.findById(folderId);
 
@@ -159,6 +169,7 @@ public class FolderService {
         folderRepository.save(folder);
     }
 
+    @Transactional
     public void removeEmailsByName(String folderName, String owner, List<String> emailIds) {
         Optional<Folder> retrievedFolder = folderRepository.findByNameAndOwner(folderName, owner);
 
@@ -177,7 +188,7 @@ public class FolderService {
             throw new ResourceNotFoundException("Folder not found");
 
         Folder folder = retrievedFolder.get();
-        if (!folder.getOwner().equals(owner))
+        if (!folder.getOwner().equals(owner) || folder.isSystemFolder())
             throw new AccessDeniedException("Access denied");
 
         if (folderRepository.findByNameAndOwner(name, owner).isPresent())
@@ -195,13 +206,8 @@ public class FolderService {
             throw new ResourceNotFoundException("Folder not found");
 
         Folder folder = retrievedFolder.get();
-        if (!folder.getOwner().equals(owner))
+        if (!folder.getOwner().equals(owner) || folder.isSystemFolder())
             throw new AccessDeniedException("Access denied");
-
-        for (String folderName : basicFolders) {
-            if (folder.getName().equals(folderName))
-                throw new AccessDeniedException("Access denied");
-        }
 
         folderRepository.delete(folder);
     }
