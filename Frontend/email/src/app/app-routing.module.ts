@@ -9,6 +9,7 @@ import { MailComponent } from './components/mail/mail.component';
 import { InboxComponent } from './components/inbox/inbox.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { SearchComponent } from './components/search/search.component';
+import { FolderComponent } from './components/folder/folder.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'drafts', component: DraftsComponent },
       { path: 'trash', component: TrashComponent },
       { path: 'folders', component: FoldersComponent },
+      { path: 'folder/:id', component: FolderComponent },
       { path: 'search', component: SearchComponent }
     ],
   },

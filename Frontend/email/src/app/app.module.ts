@@ -32,6 +32,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { SearchComponent } from './components/search/search.component';
+import { FolderComponent } from './components/folder/folder.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { SearchComponent } from './components/search/search.component';
     SignupComponent,
     EmailViewComponent,
     EmailsTableComponent,
-    SearchComponent
+    SearchComponent,
+    FolderComponent
   ],
   imports: [
     BrowserModule,

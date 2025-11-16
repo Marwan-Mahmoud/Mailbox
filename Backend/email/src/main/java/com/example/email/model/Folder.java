@@ -27,4 +27,6 @@ public class Folder {
 
     private boolean isSystemFolder;
 
+    private String sortableName;
+
 }

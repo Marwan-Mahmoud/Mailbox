@@ -2,19 +2,30 @@
 <p-toast position="top-center" key="error"></p-toast>
 
 <div class="h-full flex flex-col">
-    <div class="bg-slate-50 py-2 px-5">
-        <button (click)="createMode()" pRipple class="toolbar-btn">
-            <i class="pi pi-folder-plus align-text-top mr-[1px]"></i>
-            New Folder
-        </button>
-        <button (click)="renameMode()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
-            <i class="pi pi-pencil align-text-top mr-[1px]"></i>
-            Rename
-        </button>
-        <button (click)="deleteFolder()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
-            <i class="pi pi-trash align-text-top mr-[1px]"></i>
-            Delete
-        </button>
+    <div class="flex justify-between bg-slate-50">
+        <div class="py-2 px-5">
+            <button (click)="createMode()" pRipple class="toolbar-btn">
+                <i class="pi pi-folder-plus align-text-top mr-[1px]"></i>
+                New Folder
+            </button>
+            <button (click)="renameMode()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
+                <i class="pi pi-pencil align-text-top mr-[1px]"></i>
+                Rename
+            </button>
+            <button (click)="deleteFolder()" pRipple *ngIf="selectedFolder" class="toolbar-btn ml-4">
+                <i class="pi pi-trash align-text-top mr-[1px]"></i>
+                Delete
+            </button>
+        </div>
+        
+        <div class="py-2 px-5">
+            <button (click)="toggleSortField()" pRipple class="toolbar-btn">
+                {{ sort.field === 'creationDate' ? 'Creation Date' : 'Name' }}
+            </button>
+            <button (click)="toggleSortOrder()" pRipple class="toolbar-btn !px-2">
+                <i class="pi align-text-top" [ngClass]="sort.order==='asc' ? 'pi-arrow-up' : 'pi-arrow-down'"></i>
+            </button>
+        </div>
     </div>
 
     <div class="flex-grow p-5 2xl:p-6" (click)="unselectFolder()">
@@ -22,6 +33,7 @@
             <button
             *ngFor="let folder of folders"
             (click)="selectFolder(folder); $event.stopPropagation()"
+            (dblclick)="openFolder(folder)"
             class="h-40 w-52 flex flex-col justify-center items-center rounded-xl hover:bg-slate-100"
             [ngClass]="{ 'bg-slate-100': selectedFolder === folder }">
                 <i class="material-symbols-outlined folder-icon">folder</i>

@@ -81,11 +81,12 @@ public class FolderService {
             return false;
 
         Folder folder = new Folder();
-        folder.setName(name);
+        folder.setName(name.trim());
         folder.setOwner(owner);
         folder.setEmails(new ArrayList<String>());
         folder.setCreationDate(new Date());
         folder.setSystemFolder(false);
+        folder.setSortableName(name.trim().toLowerCase());
         folderRepository.save(folder);
         return true;
     }
@@ -194,7 +195,8 @@ public class FolderService {
         if (folderRepository.findByNameAndOwner(name, owner).isPresent())
             return false;
 
-        folder.setName(name);
+        folder.setName(name.trim());
+        folder.setSortableName(name.trim().toLowerCase());
         folderRepository.save(folder);
         return true;
     }

@@ -23,6 +23,7 @@ export class FoldersComponent implements AfterViewInit {
   creating: boolean = false;
   columnCount: number | undefined;
   rowCount: number | undefined;
+  sort: any = { field: 'creationDate', order: 'desc' };
 
   constructor(private folderService: FolderService, private router: Router, private messageService: MessageService) { }
   
@@ -39,6 +40,11 @@ export class FoldersComponent implements AfterViewInit {
         this.columnCount = Math.floor(gridWidth / (itemWidth + gap));
         this.rowCount = Math.floor(gridHeight / (itemHeight + gap));
 
+        const savedSortField = localStorage.getItem('folderSortField');
+        const savedSortOrder = localStorage.getItem('folderSortOrder');
+        if (savedSortField) this.sort.field = savedSortField;
+        if (savedSortOrder) this.sort.order = savedSortOrder;
+
         this.fetchPage(this.columnCount * this.rowCount);
       }
     });
@@ -48,7 +54,7 @@ export class FoldersComponent implements AfterViewInit {
     this.fetchPage((this.columnCount || 0) * (this.rowCount || 0), event.page);
   }
 
-  private fetchPage(size: number, page: number = 0, sort: string = 'creationDate,desc') {
+  private fetchPage(size: number, page: number = 0, sort: string = `${this.sort.field},${this.sort.order}`) {
     this.folderService.getFolders(size, page, sort).subscribe(
       (data) => this.page = data,
       () => this.router.navigate(['/login'])
@@ -58,6 +64,10 @@ export class FoldersComponent implements AfterViewInit {
   private refreshPage(): void {
     if (this.page)
       this.fetchPage(this.page.page.size, this.page.page.number);
+  }
+
+  openFolder(folder: Folder) {
+    this.router.navigate(['/mail/folder', folder.id]);
   }
 
   createMode() {
@@ -75,7 +85,7 @@ export class FoldersComponent implements AfterViewInit {
       this.renaming = true;
       this.newFolderName = this.selectedFolder.name;
       setTimeout(() => {
-        this.renameInput?.nativeElement.focus();
+        this.renameInput?.nativeElement.select();
       });
     }
   }
@@ -145,6 +155,26 @@ export class FoldersComponent implements AfterViewInit {
         () => this.showErrorMessage('Error occurred while deleting folder')
       );
     }
+  }
+
+  toggleSortField() {
+    if (this.sort.field === 'creationDate')
+      this.sort.field = 'sortableName';
+    else
+      this.sort.field = 'creationDate';
+
+    localStorage.setItem('folderSortField', this.sort.field);
+    this.refreshPage();
+  }
+
+  toggleSortOrder() {
+    if (this.sort.order === 'asc')
+      this.sort.order = 'desc';
+    else
+      this.sort.order = 'asc';
+
+    localStorage.setItem('folderSortOrder', this.sort.order);
+    this.refreshPage();
   }
 
   selectFolder(folder: Folder) {
