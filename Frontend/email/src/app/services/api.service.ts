@@ -111,7 +111,7 @@ export class ApiService {
       },
       withCredentials: true,
     };
-    return this.http.patch(`${this.baseUrl}/folders/rename/${folderId}`, null, options);
+    return this.http.patch(`${this.baseUrl}/folders/${folderId}/rename`, null, options);
   }
 
   deleteFolder(folderId: string) {
@@ -119,6 +119,20 @@ export class ApiService {
       withCredentials: true,
     };
     return this.http.delete(`${this.baseUrl}/folders/${folderId}`, options);
+  }
+
+  addEmailsToFolder(folderId: string, emailIds: string[]) {
+    const options = {
+      withCredentials: true,
+    };
+    return this.http.patch(`${this.baseUrl}/folders/${folderId}/add`, emailIds, options);
+  }
+
+  removeEmailsFromFolder(folderId: string, emailIds: string[]) {
+    const options = {
+      withCredentials: true,
+    };
+    return this.http.patch(`${this.baseUrl}/folders/${folderId}/remove`, emailIds, options);
   }
   
 }

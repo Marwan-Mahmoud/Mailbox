@@ -15,6 +15,7 @@ export class EmailViewComponent {
   @Input() moveToTrashBtn: boolean = false;
   @Input() deleteBtn: boolean = false;
   @Input() restoreBtn: boolean = false;
+  @Input() removeEmailsBtn: boolean = false;
 
   constructor(private eventBusService: EventBusService) {
     this.eventBusService.showEmail.subscribe((email: Email) => {
@@ -44,6 +45,11 @@ export class EmailViewComponent {
 
   deleteEmail() {
     this.eventBusService.deleteEmail.emit(this.email);
+    this.show = false;
+  }
+
+  removeEmailFromFolder() {
+    this.eventBusService.removeEmailFromFolder.emit(this.email);
     this.show = false;
   }
 }

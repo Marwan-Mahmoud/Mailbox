@@ -1,12 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { EmailPage } from 'src/app/models/email-page';
 import { EmailService } from 'src/app/services/email.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
+import { FolderService } from 'src/app/services/folder.service';
 
 @Component({
   selector: 'emails-table',
@@ -14,10 +15,12 @@ import { EventBusService } from 'src/app/services/event-bus.service';
   styleUrls: ['./emails-table.component.css'],
   providers: [DatePipe, MessageService]
 })
-export class EmailsTableComponent {
+export class EmailsTableComponent implements OnInit, OnDestroy {
   page: EmailPage | undefined;
   selectedEmails: Email[] = [];
-  queryParams: Params | undefined;
+
+  private queryParams: Params | undefined;
+  private subscriptions: Subscription = new Subscription();
 
   @Input() folder: string = '';
   @Input() queryParamsObservable: Observable<Params> | undefined;
@@ -26,32 +29,49 @@ export class EmailsTableComponent {
   @Input() readUnreadBtn: boolean = false;
   @Input() moveToTrashBtn: boolean = false;
   @Input() deleteBtn: boolean = false;
+  @Input() removeEmailsBtn: boolean = false;
   @Input() restoreBtn: boolean = false;
   @Input() addToFolderBtn: boolean = false;
 
   constructor(
     private emailService: EmailService,
+    private folderService: FolderService,
     private router: Router,
     private datePipe: DatePipe,
     private messageService: MessageService,
     private eventBusService: EventBusService
   ) {
-    this.eventBusService.restoreEmail.subscribe((email: Email) => {
-      this.selectedEmails = [email];
-      this.restoreEmails();
-    });
+    this.subscriptions.add(
+      this.eventBusService.restoreEmail.subscribe((email: Email) => {
+        this.selectedEmails = [email];
+        this.restoreEmails();
+      })
+    );
 
-    this.eventBusService.moveEmailToTrash.subscribe((email: Email) => {
-      this.selectedEmails = [email];
-      this.moveEmailsToTrash();
-    });
+    this.subscriptions.add(
+      this.eventBusService.moveEmailToTrash.subscribe((email: Email) => {
+        this.selectedEmails = [email];
+        this.moveEmailsToTrash();
+      })
+    );
 
-    this.eventBusService.deleteEmail.subscribe((email: Email) => {
-      this.selectedEmails = [email];
-      this.deleteEmails();
-    });
+    this.subscriptions.add(
+      this.eventBusService.deleteEmail.subscribe((email: Email) => {
+        this.selectedEmails = [email];
+        this.deleteEmails();
+      })
+    );
 
-    this.eventBusService.refreshPage.subscribe(() => this.refreshPage());
+    this.subscriptions.add(
+      this.eventBusService.removeEmailFromFolder.subscribe((email: Email) => {
+        this.selectedEmails = [email];
+        this.removeEmailsFromFolder();
+      })
+    );
+
+    this.subscriptions.add(
+      this.eventBusService.refreshPage.subscribe(() => this.refreshPage())
+    );
   }
 
   ngOnInit(): void {
@@ -59,6 +79,10 @@ export class EmailsTableComponent {
       this.queryParams = params;
       this.refreshPage();
     });
+  }
+  
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   lazyLoadData(event: any) {
@@ -116,10 +140,10 @@ export class EmailsTableComponent {
       () => this.showErrorMessage('Error occurred while deleting emails')
     );
   }
-
+  
   restoreEmails() {
     if (this.selectedEmails.length === 0) return;
-
+    
     this.emailService.restore(this.selectedEmails).subscribe(
       () => {
         this.showSuccessMessage('Emails restored successfully');
@@ -132,7 +156,7 @@ export class EmailsTableComponent {
 
   markAs() {
     if (this.selectedEmails.length === 0) return;
-
+    
     const read = this.selectedEmails.some((email) => !email.read);
     this.emailService.markAs(this.selectedEmails, read).subscribe(
       () => {
@@ -142,7 +166,27 @@ export class EmailsTableComponent {
       () => this.showErrorMessage('Error occurred while updating emails')
     );
   }
+  
+  addEmailsToFolder() {
+    if (this.selectedEmails.length > 0) {
+      this.eventBusService.showAddToFolderDialog.emit(this.selectedEmails);
+    }
+  }
+  
+  removeEmailsFromFolder() {
+    if (this.selectedEmails.length === 0) return;
 
+    const folderId = this.folder.split('/').at(-1);
+    this.folderService.removeEmailsFromFolder(folderId!, this.selectedEmails).subscribe(
+      () => {
+        this.showSuccessMessage('Emails removed successfully');
+        this.refreshPage();
+        this.selectedEmails = [];
+      },
+      () => this.showErrorMessage('Error occurred while removing emails')
+    );
+  }
+  
   formatDate(date: string) {
     const today = new Date();
     const emailDate = new Date(date);
@@ -169,7 +213,8 @@ export class EmailsTableComponent {
   }
   
   private refreshPage(): void {
-    if (this.page)
+    if (this.page) {
       this.fetchPage(this.page.page.size, this.page.page.number);
+    }
   }
 }

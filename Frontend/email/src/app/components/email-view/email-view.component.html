@@ -4,7 +4,7 @@
     [modal]="true"
     [draggable]="false"
     [dismissableMask]="true"
-    [styleClass]="'w-3/5 h-3/4'">
+    styleClass="w-3/5 h-3/4">
     
     <div class="w-full flex justify-between">
         <span class="content-center text-slate-900 text-opacity-90 font-bold">{{email?.from}}</span>
@@ -38,6 +38,12 @@
             label="Delete" icon="pi pi-trash"
             class="p-button-outlined p-button-danger"
             (click)="deleteEmail()">
+            </button>
+            
+            <button *ngIf="removeEmailsBtn" pButton pRipple
+            label="Remove" icon="pi pi-trash"
+            class="p-button-outlined p-button-danger"
+            (click)="removeEmailFromFolder()">
             </button>
         </div>
     </ng-template>

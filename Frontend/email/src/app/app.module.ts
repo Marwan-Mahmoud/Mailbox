@@ -33,6 +33,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { SearchComponent } from './components/search/search.component';
 import { FolderComponent } from './components/folder/folder.component';
+import { AddToFolderComponent } from './components/add-to-folder/add-to-folder.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { FolderComponent } from './components/folder/folder.component';
     EmailViewComponent,
     EmailsTableComponent,
     SearchComponent,
-    FolderComponent
+    FolderComponent,
+    AddToFolderComponent
   ],
   imports: [
     BrowserModule,

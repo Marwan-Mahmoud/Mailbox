@@ -58,7 +58,7 @@ public class FolderController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @PatchMapping("/add/{id}")
+    @PatchMapping("/{id}/add")
     public ResponseEntity<Void> addEmails(@PathVariable String id, @RequestBody List<String> emailIds,
             HttpSession session) {
         String email = getSessionEmail(session);
@@ -67,7 +67,7 @@ public class FolderController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/remove/{id}")
+    @PatchMapping("/{id}/remove")
     public ResponseEntity<Void> removeEmails(@PathVariable String id, @RequestBody List<String> emailIds,
             HttpSession session) {
         String email = getSessionEmail(session);
@@ -76,7 +76,7 @@ public class FolderController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/rename/{id}")
+    @PatchMapping("/{id}/rename")
     public ResponseEntity<Void> renameFolder(@PathVariable String id, @RequestParam String name, HttpSession session) {
         String email = getSessionEmail(session);
 

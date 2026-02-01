@@ -10,7 +10,7 @@ export class EventBusService {
   restoreEmail = new EventEmitter<Email>();
   moveEmailToTrash = new EventEmitter<Email>();
   deleteEmail = new EventEmitter<Email>();
+  removeEmailFromFolder = new EventEmitter<Email>();
   showComposeEmailModal = new EventEmitter();
-
-  constructor() { }
+  showAddToFolderDialog = new EventEmitter<Email[]>();
 }

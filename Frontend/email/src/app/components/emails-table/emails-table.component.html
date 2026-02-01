@@ -1,5 +1,6 @@
 <p-toast position="bottom-right" key="success"></p-toast>
 <p-toast position="top-center" key="error"></p-toast>
+<add-to-folder></add-to-folder>
 
 <div class="w-full h-full relative">
     <p-table
@@ -40,7 +41,11 @@
                         <i class="pi pi-trash align-text-top mr-[1px]"></i>
                         Delete
                     </button>
-                    <button pRipple *ngIf="addToFolderBtn" class="toolbar-btn">
+                    <button pRipple *ngIf="removeEmailsBtn" (click)="removeEmailsFromFolder()" class="toolbar-btn mr-4">
+                        <i class="pi pi-trash align-text-top mr-[1px]"></i>
+                        Remove
+                    </button>
+                    <button pRipple *ngIf="addToFolderBtn" (click)="addEmailsToFolder()" class="toolbar-btn">
                         <i class="material-symbols-outlined !text-[1.375rem] align-bottom mr-[1px]">drive_file_move</i>
                         Add To Folder
                     </button>
