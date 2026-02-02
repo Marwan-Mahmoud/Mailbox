@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { EmailPage } from 'src/app/models/email-page';
@@ -40,52 +40,27 @@ export class EmailsTableComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private messageService: MessageService,
     private eventBusService: EventBusService
-  ) {
-    this.subscriptions.add(
-      this.eventBusService.restoreEmail.subscribe((email: Email) => {
-        this.selectedEmails = [email];
-        this.restoreEmails();
-      })
-    );
-
-    this.subscriptions.add(
-      this.eventBusService.moveEmailToTrash.subscribe((email: Email) => {
-        this.selectedEmails = [email];
-        this.moveEmailsToTrash();
-      })
-    );
-
-    this.subscriptions.add(
-      this.eventBusService.deleteEmail.subscribe((email: Email) => {
-        this.selectedEmails = [email];
-        this.deleteEmails();
-      })
-    );
-
-    this.subscriptions.add(
-      this.eventBusService.removeEmailFromFolder.subscribe((email: Email) => {
-        this.selectedEmails = [email];
-        this.removeEmailsFromFolder();
-      })
-    );
-
-    this.subscriptions.add(
-      this.eventBusService.refreshPage.subscribe(() => this.refreshPage())
-    );
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.queryParamsObservable?.subscribe((params) => {
-      this.queryParams = params;
-      this.refreshPage();
-    });
+    this.initEventBusSubscriptions();
+
+    if (this.queryParamsObservable) {
+      this.subscriptions.add(
+        this.queryParamsObservable.subscribe((params) => {
+          this.queryParams = params;
+          this.refreshPage();
+        })
+      );
+    }
   }
-  
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  lazyLoadData(event: any) {
+  lazyLoadData(event: LazyLoadEvent) {
+    if (event.first == undefined || event.rows == undefined) return;
     this.fetchPage(event.rows, event.first / event.rows);
   }
 
@@ -204,17 +179,52 @@ export class EmailsTableComponent implements OnInit, OnDestroy {
     );
   }
 
+  private refreshPage(): void {
+    if (this.page) {
+      this.fetchPage(this.page.page.size, this.page.page.number);
+    }
+  }
+
+  private initEventBusSubscriptions(): void {
+    this.subscriptions.add(
+      this.eventBusService.restoreEmail.subscribe((email) => {
+        this.handleSingleEmailAction(email, () => this.restoreEmails());
+      })
+    );
+
+    this.subscriptions.add(
+      this.eventBusService.moveEmailToTrash.subscribe((email) => {
+        this.handleSingleEmailAction(email, () => this.moveEmailsToTrash());
+      })
+    );
+
+    this.subscriptions.add(
+      this.eventBusService.deleteEmail.subscribe((email) => {
+        this.handleSingleEmailAction(email, () => this.deleteEmails());
+      })
+    );
+
+    this.subscriptions.add(
+      this.eventBusService.removeEmailFromFolder.subscribe((email) => {
+        this.handleSingleEmailAction(email, () => this.removeEmailsFromFolder());
+      })
+    );
+
+    this.subscriptions.add(
+      this.eventBusService.refreshPage.subscribe(() => this.refreshPage())
+    );
+  }
+
+  private handleSingleEmailAction(email: Email, action: () => void): void {
+    this.selectedEmails = [email];
+    action();
+  }
+
   private showSuccessMessage(message: string) {
     this.messageService.add({ key:'success', severity: 'success', summary: 'Success', detail: message });
   }
 
   private showErrorMessage(message: string) {
     this.messageService.add({ key:'error', severity: 'error', summary: 'Error', detail: message });
-  }
-  
-  private refreshPage(): void {
-    if (this.page) {
-      this.fetchPage(this.page.page.size, this.page.page.number);
-    }
   }
 }

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EmailService } from 'src/app/services/email.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
 
@@ -10,25 +11,31 @@ import { EventBusService } from 'src/app/services/event-bus.service';
   styleUrls: ['./compose.component.css'],
   providers: [MessageService],
 })
-export class ComposeComponent {
+export class ComposeComponent implements OnInit, OnDestroy {
   show: boolean = false;
-
   form = new FormGroup({
     to: new FormControl('', [Validators.required, Validators.email]),
     subject: new FormControl('', Validators.required),
     body: new FormControl(''),
   });
 
+  private subscription!: Subscription;
+
   constructor(
     private eventBusService: EventBusService,
     private emailService: EmailService,
     private messageService: MessageService
-  ) {
-    this.eventBusService.showComposeEmailModal.subscribe((email) => {
-      if (email) this.form.setValue(email);
+  ) {}
 
+  ngOnInit(): void {
+    this.subscription = this.eventBusService.showComposeEmailModal.subscribe((email) => {
+      if (email) this.form.setValue(email);
       this.show = true;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   send() {
@@ -57,7 +64,8 @@ export class ComposeComponent {
     );
   }
 
-  close() {
+  autoDraft() {
+    // auto-draft on close if form has content
     const { to, subject, body } = this.getFormFields();
     if (to || subject || body)
       this.draft();

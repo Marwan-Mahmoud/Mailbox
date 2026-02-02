@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FolderComponent {
 
-  folderId: string | null;
+  private folderId: string | null;
 
   constructor(private route: ActivatedRoute) {
     this.folderId = this.route.snapshot.paramMap.get('id');
@@ -17,5 +17,4 @@ export class FolderComponent {
   get folderURI(): string {
     return `folders/${this.folderId}`;
   }
-
 }

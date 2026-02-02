@@ -37,12 +37,12 @@
             class="h-40 w-52 flex flex-col justify-center items-center rounded-xl hover:bg-slate-100"
             [ngClass]="{ 'bg-slate-100': selectedFolder === folder }">
                 <i class="material-symbols-outlined folder-icon">folder</i>
-                <span *ngIf="!renaming || selectedFolder !== folder" class="w-3/4 whitespace-nowrap overflow-hidden text-ellipsis">{{folder.name}}</span>
+                <span *ngIf="mode === 'browsing' || selectedFolder !== folder" class="w-3/4 whitespace-nowrap overflow-hidden text-ellipsis">{{folder.name}}</span>
                 
                 <input type="text" class="w-3/4 text-center"
-                *ngIf="renaming && selectedFolder === folder"
+                *ngIf="mode !== 'browsing' && selectedFolder === folder"
                 #renameInput
-                (blur)="renameEnd()" (keyup.enter)="renameEnd()" (keyup.escape)="cancelCreate()"
+                (blur)="confirmNewName()" (keyup.enter)="confirmNewName()" (keyup.escape)="browsingMode()"
                 [(ngModel)]="newFolderName" />
             </button>
         </div>
