@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { Folder } from 'src/app/models/folder';
 import { EventBusService } from 'src/app/services/event-bus.service';
@@ -12,35 +13,39 @@ import { FolderService } from 'src/app/services/folder.service';
   styleUrls: ['./add-to-folder.component.css'],
   providers: [MessageService],
 })
-export class AddToFolderComponent {
+export class AddToFolderComponent implements OnInit, OnDestroy {
 
   @ViewChild('renameInput') renameInput: ElementRef<HTMLInputElement> | undefined;
 
   show: boolean = false;
   folders: Folder[] = [];
-  selectedFolder: Folder | undefined;
-  selectedEmails: Email[] = [];
   creating: boolean = false;
   newFolderName: string = "";
+  
+  private selectedEmails: Email[] = [];
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private eventBusService: EventBusService,
     private folderService: FolderService,
     private router: Router,
     private messageService: MessageService,
-  ) {
-    this.eventBusService.showAddToFolderDialog.subscribe((emails: Email[]) => {
+  ) {}
+  
+  ngOnInit(): void {
+    this.fetchFolders();
+    
+    this.subscription = this.eventBusService.showAddToFolderDialog.subscribe((emails: Email[]) => {
       this.selectedEmails = emails;
       this.show = true;
     });
   }
-
-  ngOnInit(): void {
-    this.fetchFolders();
+  
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   selectFolder(folder: Folder) {
-    this.selectedFolder = folder;
     this.show = false;
 
     this.folderService.addEmailsToFolder(folder.id, this.selectedEmails).subscribe(
@@ -79,7 +84,7 @@ export class AddToFolderComponent {
       }
     );
   }
-  
+
   cancelCreate() {
     this.creating = false;
   }
@@ -98,5 +103,4 @@ export class AddToFolderComponent {
   private showErrorMessage(message: string) {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
   }
-  
 }

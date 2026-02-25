@@ -33,13 +33,13 @@ export class FoldersComponent implements AfterViewInit {
   private rowCount: number | undefined;
   private columnCount: number | undefined;
 
-constructor(
-  private folderService: FolderService,
-  private router: Router,
-  private messageService: MessageService,
-  private cdr: ChangeDetectorRef
-) {}
-  
+  constructor(
+    private folderService: FolderService,
+    private router: Router,
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   ngAfterViewInit(): void {
     this.calculateLayout();
     this.cdr.detectChanges();
@@ -109,7 +109,9 @@ constructor(
       },
       () => {
         this.showErrorMessage('Folder name already exists');
-        this.browsingMode();
+        setTimeout(() => {
+          this.renameInput?.nativeElement.focus();
+        });
       }
     );
   }
@@ -123,8 +125,10 @@ constructor(
         },
         () => {
           this.showErrorMessage('Folder name already exists');
-          this.browsingMode();
-        } 
+          setTimeout(() => {
+            this.renameInput?.nativeElement.focus();
+          });
+        }
       );
     } else {
       this.browsingMode();
@@ -161,6 +165,14 @@ constructor(
     const savedSortOrder = localStorage.getItem('folderSortOrder') as SortOrder | null;
     if (savedSortField) this.sort.field = savedSortField;
     if (savedSortOrder) this.sort.order = savedSortOrder;
+  }
+
+  clickOnFolder(folder: Folder) {
+    if (this.mode === 'browsing') this.selectFolder(folder);
+  }
+
+  clickOnVoid() {
+    if (this.mode === 'browsing') this.unselectFolder();
   }
 
   openFolder(folder: Folder) {

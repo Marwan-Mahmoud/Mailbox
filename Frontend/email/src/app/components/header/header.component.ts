@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EmailService } from 'src/app/services/email.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,9 +10,9 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent {
 
-  @Output() navbarEvent = new EventEmitter();
+  @Output() navbarEvent = new EventEmitter<void>();
   
-  folders = [
+  readonly folders = [
     { name: 'All Folders', value: 'All'},
     { name: 'Inbox', value: 'Inbox'},
     { name: 'Sent', value: 'Sent'},
@@ -21,7 +20,7 @@ export class HeaderComponent {
     { name: 'Trash', value: 'Trash'}
   ];
 
-  form = new FormGroup(
+  readonly form = new FormGroup(
     {
       keywords: new FormControl(''),
       from: new FormControl(''),
@@ -46,17 +45,8 @@ export class HeaderComponent {
   search() {
     const formValues = this.getFormFields();
 
-    const formatDate = (date: Date) => 
-      {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-    
-        return `${year}-${month}-${day}`;
-      };
-
-    if (formValues['startDate']) formValues['startDate'] = formatDate(formValues['startDate']);
-    if (formValues['endDate']) formValues['endDate'] = formatDate(formValues['endDate']);
+    if (formValues['startDate']) formValues['startDate'] = this.formatDate(formValues['startDate']);
+    if (formValues['endDate']) formValues['endDate'] = this.formatDate(formValues['endDate']);
 
     this.router.navigate(['/mail/search'], { queryParams: formValues });
   }
@@ -76,6 +66,13 @@ export class HeaderComponent {
       if (!value) delete formValues[key];
     }
     return formValues;
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   private notEmptyFormValidator(): ValidatorFn {
