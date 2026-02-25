@@ -5,7 +5,7 @@ import { Email } from '../models/email';
   providedIn: 'root'
 })
 export class EventBusService {
-  refreshPage = new EventEmitter();
+  refreshPage = new EventEmitter<void>();
   showEmail = new EventEmitter<Email>();
   restoreEmail = new EventEmitter<Email>();
   moveEmailToTrash = new EventEmitter<Email>();

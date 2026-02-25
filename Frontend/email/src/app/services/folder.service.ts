@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Folder } from '../models/folder';
 import { Email } from '../models/email';
 
 @Injectable({

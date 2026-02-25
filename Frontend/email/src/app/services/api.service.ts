@@ -8,7 +8,7 @@ import { FolderPage } from '../models/folder-page';
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080';
+  private readonly baseUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) {}
 
@@ -134,5 +134,4 @@ export class ApiService {
     };
     return this.http.patch(`${this.baseUrl}/folders/${folderId}/remove`, emailIds, options);
   }
-  
 }

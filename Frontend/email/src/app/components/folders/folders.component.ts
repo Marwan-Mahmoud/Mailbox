@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Folder } from 'src/app/models/folder';
 import { FolderPage } from 'src/app/models/folder-page';
 import { FolderService } from 'src/app/services/folder.service';
@@ -13,7 +13,7 @@ type Mode = 'browsing' | 'creating' | 'renaming';
   selector: 'app-folders',
   templateUrl: './folders.component.html',
   styleUrls: ['./folders.component.css'],
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class FoldersComponent implements AfterViewInit {
   
@@ -37,6 +37,7 @@ export class FoldersComponent implements AfterViewInit {
     private folderService: FolderService,
     private router: Router,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -185,6 +186,17 @@ export class FoldersComponent implements AfterViewInit {
 
   unselectFolder() {
     this.selectedFolder = null;
+  }
+
+  confirmDeletion() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this folder?',
+      header: 'Delete Folder',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+          this.deleteFolder();
+      }
+    });
   }
 
   private showSuccessMessage(message: string) {
