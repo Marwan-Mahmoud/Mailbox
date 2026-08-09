@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.email.dto.EmailDTO;
+import com.example.email.exception.UserNotFoundException;
 import com.example.email.model.Email;
 import com.example.email.repository.EmailRepository;
+import com.example.email.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -17,11 +19,17 @@ import lombok.AllArgsConstructor;
 public class ComposeService {
 
     private final EmailRepository emailRepository;
+    private final UserRepository userRepository;
     private final FolderService folderService;
     private final ModelMapper modelMapper;
 
     @Transactional
     public void sendEmail(EmailDTO emailDTO) {
+        boolean userExists = userRepository.existsByEmail(emailDTO.getTo());
+        if (!userExists) {
+            throw new UserNotFoundException("Recipient email not found: " + emailDTO.getTo());
+        }
+
         Email email = modelMapper.map(emailDTO, Email.class);
         email.setId(null);
         email.setDate(new Date());
