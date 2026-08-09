@@ -2,6 +2,12 @@
 <p-toast position="top-center" key="error"></p-toast>
 <add-to-folder></add-to-folder>
 
+<p-confirmDialog
+[dismissableMask]="true"
+[acceptButtonStyleClass]="'p-button-outlined p-button-sm p-button-danger'"
+[rejectButtonStyleClass]="'p-button-outlined p-button-sm p-button-secondary'">
+</p-confirmDialog>
+
 <div class="w-full h-full relative">
     <p-table
     [value]="page?.content || []"
@@ -37,7 +43,7 @@
                         <i class="pi pi-undo align-text-top mr-[1px]"></i>
                         Restore
                     </button>
-                    <button pRipple *ngIf="deleteBtn" (click)="deleteEmails()" class="toolbar-btn mr-4">
+                    <button pRipple *ngIf="deleteBtn" (click)="confirmDeletion()" class="toolbar-btn mr-4">
                         <i class="pi pi-trash align-text-top mr-[1px]"></i>
                         Delete
                     </button>

@@ -47,7 +47,10 @@ export class ComposeComponent implements OnInit, OnDestroy {
         this.form.reset();
         this.showSuccessMessage('Email sent successfully');
       },
-      () => this.showErrorMessage('Error occurred while sending email')
+      (error) => {
+        if (error.status === 422) this.showErrorMessage('Recipient not found')
+        else this.showErrorMessage('Error occurred while sending email')
+      }
     );
   }
 

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { EmailPage } from 'src/app/models/email-page';
@@ -13,7 +13,7 @@ import { FolderService } from 'src/app/services/folder.service';
   selector: 'emails-table',
   templateUrl: './emails-table.component.html',
   styleUrls: ['./emails-table.component.css'],
-  providers: [DatePipe, MessageService]
+  providers: [DatePipe, MessageService, ConfirmationService]
 })
 export class EmailsTableComponent implements OnInit, OnDestroy {
   page: EmailPage | undefined;
@@ -39,6 +39,7 @@ export class EmailsTableComponent implements OnInit, OnDestroy {
     private router: Router,
     private datePipe: DatePipe,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private eventBusService: EventBusService
   ) {}
 
@@ -101,6 +102,17 @@ export class EmailsTableComponent implements OnInit, OnDestroy {
       },
       () => this.showErrorMessage('Error occurred while moving emails to trash')
     );
+  }
+
+  confirmDeletion() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete these emails?',
+      header: 'Delete Emails',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+          this.deleteEmails();
+      }
+    });
   }
 
   deleteEmails() {
@@ -200,7 +212,7 @@ export class EmailsTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.eventBusService.deleteEmail.subscribe((email) => {
-        this.handleSingleEmailAction(email, () => this.deleteEmails());
+        this.handleSingleEmailAction(email, () => this.confirmDeletion());
       })
     );
 
