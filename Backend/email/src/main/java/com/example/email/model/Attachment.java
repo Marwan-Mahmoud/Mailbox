@@ -1,7 +1,6 @@
 package com.example.email.model;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -12,24 +11,24 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Email {
+public class Attachment {
 
     @Id
     private String id;
 
-    private String from;
+    private String owner;
 
-    private String to;
+    private String recipient;
 
-    private String subject;
+    private String filename;
 
-    private String body;
+    private String contentType;
 
-    private Date date;
+    private Long size;
 
-    private Boolean read;
+	private Date creationDate;
 
-    private Boolean draft;
+    private boolean uploaded;
 
-    private List<Attachment> attachments;
+    private short nextSequenceNumber;
 }

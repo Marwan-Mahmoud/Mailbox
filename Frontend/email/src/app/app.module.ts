@@ -7,11 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AddToFolderComponent } from './components/add-to-folder/add-to-folder.component';
+import { AttachmentsListComponent } from './components/attachments-list/attachments-list.component';
 import { ComposeComponent } from './components/compose/compose.component';
 import { DraftsComponent } from './components/drafts/drafts.component';
 import { EmailViewComponent } from './components/email-view/email-view.component';
 import { EmailsTableComponent } from './components/emails-table/emails-table.component';
 import { FolderComponent } from './components/folder/folder.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FoldersComponent } from './components/folders/folders.component';
 import { HeaderComponent } from './components/header/header.component';
 import { InboxComponent } from './components/inbox/inbox.component';
@@ -32,18 +34,23 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PaginatorModule } from 'primeng/paginator';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
 	declarations: [
 		AddToFolderComponent,
 		AppComponent,
+		AttachmentsListComponent,
 		ComposeComponent,
 		DraftsComponent,
 		EmailViewComponent,
 		EmailsTableComponent,
+		FileUploadComponent,
 		FolderComponent,
 		FoldersComponent,
 		HeaderComponent,
@@ -70,10 +77,12 @@ import { ToastModule } from 'primeng/toast';
 		InputTextModule,
 		OverlayPanelModule,
 		PaginatorModule,
+		ProgressBarModule,
 		ReactiveFormsModule,
 		RippleModule,
 		TableModule,
 		ToastModule,
+		FontAwesomeModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]

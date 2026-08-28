@@ -1,0 +1,36 @@
+<p-overlayPanel #op [showCloseIcon]=false [style]="{ width: '320px' }">
+  <div class="text-slate-900">
+    <div class="font-semibold border-b pb-4">
+      <div class="header-left">
+        <i class="pi pi-paperclip"></i>
+        <span>Attachments</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 mt-3" *ngIf="attachments.length">
+      <div class="flex items-center p-1 border-b last:border-none" *ngFor="let attachment of attachments">
+        <div class="min-w-0 flex-1">
+          <div class="flex gap-2">
+            <fa-icon [icon]="getMimeIcon(attachment.contentType)"></fa-icon>
+            <a class="attachment-name" [title]="attachment.filename" (click)="downloadAttachment(attachment.id || '')">
+              {{ attachment.filename }}
+            </a>
+          </div>
+          <div class="progress-row" *ngIf="showProgress">
+            <p-progressBar [value]="attachment.progress || 0" [showValue]="false" class="w-4/5" [styleClass]="'h-1.5'"></p-progressBar>
+            <span class="text-xs text-slate-900 text-opacity-90">{{attachment.progress || 0}}%</span>
+          </div>
+        </div>
+        <button
+          *ngIf="cancelBtn"
+          type="button"
+          pButton
+          icon="pi pi-times"
+          class="p-button-text p-button-danger cancel-button"
+          (click)="cancelAttachment(attachment)"
+          [attr.aria-label]="'Remove ' + attachment.filename"
+        ></button>
+      </div>
+    </div>
+  </div>
+</p-overlayPanel>

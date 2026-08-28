@@ -1,0 +1,56 @@
+::ng-deep file-upload span.pi {
+    font-size: 1.2rem;
+}
+
+::ng-deep file-upload .upload-ongoing span.pi-cloud-upload {
+    animation: float 1s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(3px);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.pulse {
+  animation: buttonPulse 0.4s ease-out;
+}
+
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.upload-status-enter {
+  transform: scale(0);
+  opacity: 1;
+  animation: buttonEnter 0.4s ease-out forwards;
+}
+
+@keyframes buttonEnter {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}

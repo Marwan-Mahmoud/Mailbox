@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Email } from '../models/email';
+import { Attachment } from '../models/attachment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,23 +14,13 @@ export class EmailService {
     return this.api.getPage(folder, size, page, sort, queryParams);
   }
 
-  sendEmail(to: string, subject: string, body: string) {
-    const email = {
-      from: localStorage.getItem('userEmail') as string,
-      to: to,
-      subject: subject,
-      body: body
-    };
+  sendEmail(email: Partial<Email>) {
+    email.from = localStorage.getItem('userEmail') as string;
     return this.api.sendEmail(email);
   }
 
-  draftEmail(to: string, subject: string, body: string) {
-    const email = {
-      from: localStorage.getItem('userEmail') as string,
-      to: to,
-      subject: subject,
-      body: body
-    };
+  draftEmail(email: Partial<Email>) {
+    email.from = localStorage.getItem('userEmail') as string;
     return this.api.draftEmail(email);
   }
 

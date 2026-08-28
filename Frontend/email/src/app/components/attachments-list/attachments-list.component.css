@@ -1,0 +1,22 @@
+.header-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachment-name {
+  @apply block w-4/5 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold mb-1 hover:underline hover:cursor-pointer;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cancel-button {
+  width: 2rem;
+  height: 2rem;
+  margin-left: 0.25rem;
+  border-radius: 50%;
+}

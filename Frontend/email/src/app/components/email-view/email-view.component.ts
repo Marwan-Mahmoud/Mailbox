@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Email } from 'src/app/models/email';
 import { EventBusService } from 'src/app/services/event-bus.service';
@@ -11,6 +11,7 @@ import { EventBusService } from 'src/app/services/event-bus.service';
 export class EmailViewComponent implements OnInit, OnDestroy {
   email: Email | undefined;
   show = false;
+  toggleAttachmentListPanel = new EventEmitter<any>();
 
   private subscription!: Subscription;
 
@@ -56,6 +57,10 @@ export class EmailViewComponent implements OnInit, OnDestroy {
 
   removeEmailFromFolder(): void {
     this.emitAndClose(this.eventBusService.removeEmailFromFolder);
+  }
+
+  toggleOverlayPanel($event: any) {
+    this.toggleAttachmentListPanel.emit($event);
   }
 
   private emitAndClose(emitter: { emit: (email: Email) => void }): void {

@@ -5,3 +5,7 @@ button {
 pre {
     font-family: Inter, ui-sans-serif;
 }
+
+::ng-deep email-view span.pi {
+    font-size: 1.2rem;
+}

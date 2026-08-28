@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { EmailPage } from '../models/email-page';
 import { FolderPage } from '../models/folder-page';
+import { Attachment } from '../models/attachment';
 
 @Injectable({
   providedIn: 'root',
@@ -133,5 +134,28 @@ export class ApiService {
       withCredentials: true,
     };
     return this.http.patch(`${this.baseUrl}/folders/${folderId}/remove`, emailIds, options);
+  }
+
+  getSignedDownloadURL(id: string) {
+    const options = {
+      withCredentials: true,
+      responseType: 'text' as const
+    };
+    return this.http.get(`${this.baseUrl}/attachments/${id}/download`, options);
+  }
+
+  getSignedUploadURL(attachment: Attachment) {
+    const options = {
+      withCredentials: true,
+      responseType: 'text' as const
+    };
+    return this.http.post(`${this.baseUrl}/attachments/upload`, attachment, options);
+  }
+
+  confirmUpload(id: string) {
+    const options = {
+      withCredentials: true,
+    };
+    return this.http.patch(`${this.baseUrl}/attachments/${id}/confirm`, null, options);
   }
 }

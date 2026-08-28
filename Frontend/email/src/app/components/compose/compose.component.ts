@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { EmailService } from 'src/app/services/email.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { Email } from 'src/app/models/email';
 
 @Component({
   selector: 'app-compose',
@@ -12,6 +14,7 @@ import { EventBusService } from 'src/app/services/event-bus.service';
   providers: [MessageService],
 })
 export class ComposeComponent implements OnInit, OnDestroy {
+  @ViewChild(FileUploadComponent) fileUpload: FileUploadComponent | undefined;
   show: boolean = false;
   form = new FormGroup({
     to: new FormControl('', [Validators.required, Validators.email]),
@@ -39,12 +42,13 @@ export class ComposeComponent implements OnInit, OnDestroy {
   }
 
   send() {
-    const { to, subject, body } = this.getFormFields();
-    this.emailService.sendEmail(to, subject, body).subscribe(
+    const email = this.createEmail();
+    this.emailService.sendEmail(email).subscribe(
       () => {
         this.eventBusService.refreshPage.emit();
         this.show = false;
         this.form.reset();
+        this.fileUpload?.clear();
         this.showSuccessMessage('Email sent successfully');
       },
       (error) => {
@@ -55,8 +59,8 @@ export class ComposeComponent implements OnInit, OnDestroy {
   }
 
   draft() {
-    const { to, subject, body } = this.getFormFields();
-    this.emailService.draftEmail(to, subject, body).subscribe(
+    const email = this.createEmail();
+    this.emailService.draftEmail(email).subscribe(
       () => {
         this.eventBusService.refreshPage.emit();
         this.show = false;
@@ -69,9 +73,22 @@ export class ComposeComponent implements OnInit, OnDestroy {
 
   autoDraft() {
     // auto-draft on close if form has content
-    const { to, subject, body } = this.getFormFields();
-    if (to || subject || body)
+    const email = this.createEmail();
+    if (email.to || email.subject || email.body)
       this.draft();
+  }
+
+  private createEmail() {
+    const { to, subject, body } = this.getFormFields();
+    const email: Partial<Email> = {
+      to: to,
+      subject: subject,
+      body: body
+    };
+    if (this.fileUpload?.attachments) {
+      email.attachmentsId = this.fileUpload.attachments.map((attachment) => attachment.id!);
+    }
+    return email;
   }
 
   private showSuccessMessage(message: string) {
@@ -87,5 +104,9 @@ export class ComposeComponent implements OnInit, OnDestroy {
     const subject = this.form.get('subject')?.value as string;
     const body = this.form.get('body')?.value as string;
     return { to, subject, body };
+  }
+
+  get uploadOngoing() {
+    return (this.fileUpload?.uploadOngoingCount || 0) > 0 ;
   }
 }

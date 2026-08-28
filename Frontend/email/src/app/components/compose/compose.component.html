@@ -29,18 +29,23 @@
             formControlName="body"
             class="w-full flex-grow mt-1 mb-4 resize-none text-sm"></textarea>
 
-            <div class="h-10 mb-2 w-full flex">
-                <button type="submit" pButton pRipple
-                label="Send" icon="pi pi-send"
-                [disabled]="form.invalid"
-                class="p-button-outlined p-button-primary mr-4">
-                </button>
-                
-                <button type="button" pButton pRipple
-                label="Draft" icon="pi pi-file-edit"
-                (click)="draft()"
-                class="p-button-outlined p-button-secondary">
-                </button>
+            <div class="h-10 mb-2 w-full flex justify-between">
+                <div>
+                    <button type="submit" pButton pRipple
+                    label="Send" icon="pi pi-send"
+                    [disabled]="form.invalid || uploadOngoing"
+                    class="p-button-outlined p-button-primary mr-4">
+                    </button>
+
+                    <button type="button" pButton pRipple
+                    label="Draft" icon="pi pi-file-edit"
+                    (click)="draft()"
+                    class="p-button-outlined p-button-secondary">
+                    </button>
+                </div>
+                <div>
+                    <file-upload></file-upload>
+                </div>
             </div>
         </div>
     </form>

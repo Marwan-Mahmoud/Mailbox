@@ -1,0 +1,26 @@
+<button type="button" pButton pRipple
+icon="pi pi-cloud-upload"
+(click)="toggleOverlayPanel($event)"
+(animationend)="uploadStatusPulse = false"
+[class]="{
+    'hidden': attachments.length === 0,
+    'upload-status-enter': attachments.length === 1 && firstUpload,
+    'upload-ongoing': uploadOngoingCount,
+    'pulse': attachments.length > 1 && uploadStatusPulse}"
+class="p-button-outlined p-button-primary mr-4">
+</button>
+
+<button type="button" pButton pRipple
+icon="pi pi-paperclip"
+(click)="fileInput.click()"
+class="p-button-outlined p-button-secondary">
+</button>
+
+<attachments-list
+[attachments]="attachments"
+[cancelBtn]="true"
+[showProgress]="true"
+[toggleEvents]="toggleAttachmentListPanel">
+</attachments-list>
+
+<input type="file" class="hidden" #fileInput (change)="onFileSelected($event)">
