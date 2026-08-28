@@ -34,8 +34,8 @@ public class UserService {
     @Transactional
     public boolean register(UserDTO userDTO) {
         String email = userDTO.getEmail();
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
+        boolean userExists = userRepository.existsByEmail(email);
+        if (userExists) {
             return false;
         }
 

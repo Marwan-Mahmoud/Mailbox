@@ -25,7 +25,7 @@ public class UserController {
     public ResponseEntity<Void> login(@Valid @RequestBody UserDTO userDTO, HttpSession session) {
         if (userService.login(userDTO)) {
             session.setAttribute("email", userDTO.getEmail());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
