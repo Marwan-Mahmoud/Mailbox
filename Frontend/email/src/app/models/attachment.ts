@@ -4,4 +4,5 @@ export interface Attachment {
   contentType: string;
   size: number;
   progress?: number;
+  state?: 'ongoing' | 'uploaded';
 }

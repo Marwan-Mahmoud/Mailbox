@@ -8,7 +8,7 @@
     </div>
 
     <div class="flex flex-col gap-2 mt-3" *ngIf="attachments.length">
-      <div class="flex items-center p-1 border-b last:border-none" *ngFor="let attachment of attachments">
+      <div class="flex items-center p-1 border-b last:border-none" *ngFor="let attachment of attachments; let i = index;">
         <div class="min-w-0 flex-1">
           <div class="flex gap-2">
             <fa-icon [icon]="getMimeIcon(attachment.contentType)"></fa-icon>
@@ -27,7 +27,7 @@
           pButton
           icon="pi pi-times"
           class="p-button-text p-button-danger cancel-button"
-          (click)="cancelAttachment(attachment)"
+          (click)="cancelAttachment(i)"
           [attr.aria-label]="'Remove ' + attachment.filename"
         ></button>
       </div>

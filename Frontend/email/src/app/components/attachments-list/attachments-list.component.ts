@@ -33,14 +33,16 @@ export class AttachmentsListComponent implements OnInit {
     }
   }
 
-  cancelAttachment(attachment: Attachment): void {
-    const index = this.attachments.indexOf(attachment);
-    if (index !== -1) {
-      this.attachments.splice(index, 1);
-      setTimeout(() => {
-        this.overlayPanel?.align();
-      }, 0);
-    }
+  cancelAttachment(index: number): void {
+    if (index < 0 || index >= this.attachments.length)
+      return;
+
+    this.attachmentService.cancelUpload(this.attachments[index]);
+    this.attachments.splice(index, 1);
+    setTimeout(() => {
+      this.overlayPanel?.align();
+    }, 0);
+
     if (this.attachments.length === 0) {
       this.overlayPanel?.hide();
     }

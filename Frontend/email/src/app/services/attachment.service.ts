@@ -20,7 +20,7 @@ export class AttachmentService {
     return this.api.getSignedDownloadURL(id);
   }
 
-  upload(attachment: Attachment, file: File, callback: ()=> void) {
+  upload(attachment: Attachment, file: File) {
     const uploadObservable = this.getSignedUploadURL(attachment).pipe(
       switchMap((signedUrl) => {
         return this.http.put(String(signedUrl), file, {reportProgress: true, observe: 'events'});
@@ -34,7 +34,7 @@ export class AttachmentService {
           const attachmentId = this.extractAttachmentId(event.body);
           attachment.id = attachmentId;
           this.confirmUpload(attachmentId!).subscribe();
-          callback();
+          attachment.state = 'uploaded';
         }
       },
       (error) => console.error('Upload failed', error));

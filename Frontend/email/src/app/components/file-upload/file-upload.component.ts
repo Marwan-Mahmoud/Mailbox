@@ -11,7 +11,6 @@ import { AttachmentService } from 'src/app/services/attachment.service';
 export class FileUploadComponent {
   attachments: Attachment[] = [];
   uploadStatusPulse: boolean = false;
-  uploadOngoingCount: number = 0;
   firstUpload: boolean = false;
   toggleAttachmentListPanel = new EventEmitter<any>();
   
@@ -26,7 +25,7 @@ export class FileUploadComponent {
       const {file, metadata} = attachment;
       if (this.validateUpload(metadata)) {
         this.updateState(metadata);
-        this.attachmentService.upload(metadata, file, this.uploadCompleted.bind(this));
+        this.attachmentService.upload(metadata, file);
       }
     }
   }
@@ -67,7 +66,7 @@ export class FileUploadComponent {
   }
 
   private updateState(attachment: Attachment) {
-    this.uploadOngoingCount += 1;
+    attachment.state = 'ongoing';
     this.uploadStatusPulse = true;
     this.attachments.push(attachment);
     this.firstUpload = this.attachments.length === 1;
@@ -82,11 +81,11 @@ export class FileUploadComponent {
     this.firstUpload = false;
   }
 
-  uploadCompleted() {
-    this.uploadOngoingCount -= 1
-  }
-
   toggleOverlayPanel($event: any) {
     this.toggleAttachmentListPanel.emit($event);
+  }
+
+  get uploadOngoingCount() {
+    return this.attachments.filter(attachment => attachment.state === 'ongoing').length;
   }
 }
