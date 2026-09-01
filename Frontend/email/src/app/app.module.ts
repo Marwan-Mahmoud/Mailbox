@@ -30,6 +30,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -72,6 +73,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 		ConfirmDialogModule,
 		DialogModule,
 		DropdownModule,
+		EditorModule,
 		HttpClientModule,
 		InputTextareaModule,
 		InputTextModule,

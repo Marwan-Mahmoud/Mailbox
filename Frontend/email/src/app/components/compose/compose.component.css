@@ -10,3 +10,16 @@ input.ng-dirty.ng-invalid {
 input.ng-dirty.ng-invalid:focus:focus {
     border-color: var(--primary-500);
 }
+
+::ng-deep .p-editor-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+::ng-deep .ql-editor:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 1px #6366F1;
+    border: 1px solid #4F46E5;
+}

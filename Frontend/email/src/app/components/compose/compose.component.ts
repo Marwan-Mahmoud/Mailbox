@@ -6,6 +6,7 @@ import { EmailService } from 'src/app/services/email.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { Email } from 'src/app/models/email';
+import { Editor } from 'primeng/editor';
 
 @Component({
   selector: 'app-compose',
@@ -15,6 +16,7 @@ import { Email } from 'src/app/models/email';
 })
 export class ComposeComponent implements OnInit, OnDestroy {
   @ViewChild(FileUploadComponent) fileUpload: FileUploadComponent | undefined;
+  @ViewChild('editor') editor: Editor | undefined;
   show: boolean = false;
   form = new FormGroup({
     to: new FormControl('', [Validators.required, Validators.email]),
@@ -34,6 +36,11 @@ export class ComposeComponent implements OnInit, OnDestroy {
     this.subscription = this.eventBusService.showComposeEmailModal.subscribe((email) => {
       if (email) this.form.setValue(email);
       this.show = true;
+      setTimeout(() => {
+        if (this.editor?.quill) {
+          this.editor.quill.clipboard.dangerouslyPasteHTML(email.body || '');
+        }
+      });
     });
   }
 

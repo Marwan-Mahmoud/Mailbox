@@ -24,10 +24,39 @@
             class="p-inputtext w-full h-10 mt-1"/>
             
             <label for="body" class="mt-4">Body:</label>
-            <textarea pInputTextarea
+            <p-editor #editor
             id="body"
             formControlName="body"
-            class="w-full flex-grow mt-1 mb-4 resize-none text-sm"></textarea>
+            class="w-full flex-grow mt-1 mb-4">
+                <ng-template pTemplate="header">
+                    <span class="ql-formats">
+                        <select class="ql-size"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-script" value="sub"></button>
+                        <button class="ql-script" value="super"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-blockquote"></button>
+                        <button class="ql-code-block"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-direction" value="rtl"></button>
+                        <select class="ql-align"></select>
+                    </span>
+                </ng-template>
+            </p-editor>
 
             <div class="h-10 mb-2 w-full flex justify-between">
                 <div>
