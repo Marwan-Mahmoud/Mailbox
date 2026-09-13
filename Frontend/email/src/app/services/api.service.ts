@@ -4,12 +4,13 @@ import { User } from '../models/user';
 import { EmailPage } from '../models/email-page';
 import { FolderPage } from '../models/folder-page';
 import { Attachment } from '../models/attachment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private readonly baseUrl = 'http://localhost:8080';
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

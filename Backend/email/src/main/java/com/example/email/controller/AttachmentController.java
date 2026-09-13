@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = "${app.cors.origin}", allowCredentials = "true")
 @RequestMapping("/attachments")
 @AllArgsConstructor
 public class AttachmentController {

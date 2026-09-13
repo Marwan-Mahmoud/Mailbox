@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-signup',
@@ -20,17 +21,19 @@ import { UserService } from 'src/app/services/user.service';
 export class SignupComponent {
   form = new FormGroup(
     {
-      email: new FormControl('', [Validators.required, Validators.email]),
+      username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+$/)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', Validators.required),
     },
     this.passwordMatchValidator()
   );
+  domain = environment.domain;
 
   constructor(private messageService: MessageService, private userService: UserService, private router: Router) { }
 
   signup() {
-    const email = this.form.get('email')?.value as string;
+    const username = this.form.get('username')?.value as string;
+    const email = `${username}@${this.domain}`;
     const password = this.form.get('password')?.value as string;
     this.userService.signup(email, password).subscribe(
       () => {
