@@ -228,7 +228,9 @@ export class FoldersComponent implements AfterViewInit {
   get folders(): Folder[] {
     let folders = this.page?.content.slice(0, this.pageSize) || [];
     if (this.tempFolder) {
-      folders.pop();
+      if (folders.length >= this.pageSize) {
+        folders.pop();
+      }
       folders.unshift(this.tempFolder);
     }
     return folders;
